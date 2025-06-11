@@ -1,0 +1,97 @@
+@php
+    $menus = [
+        [
+            'header' => 'Pages',
+            'items' => [
+                [
+                    'title' => 'Home',
+                    'icon' => 'fas fa-home',
+                    'prefix' => 'home.*',
+                    'children' => [
+                        ['title' => 'Batch Menu', 'route' => 'home.batch-menu.index'],
+                        ['title' => 'Banner', 'route' => 'home.banner.index'],
+                        ['title' => 'Benefit', 'route' => 'home.benefit.index'],
+                        ['title' => 'Diskon', 'route' => 'home.diskon.index'],
+                        ['title' => 'Promo', 'route' => 'home.promo.index'],
+                        ['title' => 'Testimoni', 'route' => 'home.testimoni.index'],
+                        ['title' => 'What`s Inside', 'route' => 'home.whats-inside.index'],
+                        ['title' => 'Why Us', 'route' => 'home.why-us.index'],
+                    ],
+                ],
+                [
+                    'title' => 'FAQ',
+                    'icon' => 'fas fa-comments',
+                    'prefix' => 'faq.*',
+                    'children' => [
+                        ['title' => 'Faq', 'route' => 'faq.index'],
+                    ],
+                ],
+                [
+                    'title' => 'Our Community',
+                    'icon' => 'fas fa-users',
+                    'children' => [
+
+                    ],
+                ],
+            ],
+        ],
+        [
+            'header' => 'Master',
+            'items' => [
+                [
+                    'title' => 'Batch',
+                    'icon' => 'fas fa-table',
+                    'children' => [['title' => 'Batch Data', 'url' => 'components-article.html']],
+                ],
+            ],
+        ],
+        [
+            'header' => 'Settings',
+            'items' => [
+                [
+                    'title' => 'Profile',
+                    'icon' => 'far fa-user',
+                    'children' => [
+                        ['title' => 'Profile Data', 'url' => 'auth-forgot-password.html'],
+                    ],
+                ],
+            ],
+        ],
+    ];
+@endphp
+
+<div class="main-sidebar sidebar-style-2">
+    <div class="ml-3 mt-3 d-flex align-items-center"></div>
+
+    <aside id="sidebar-wrapper">
+        <ul class="sidebar-menu">
+            @foreach ($menus as $section)
+                <li class="menu-header">{{ $section['header'] }}</li>
+                @foreach ($section['items'] as $item)
+                    @php
+                        $isActive = isset($item['prefix']) && request()->routeIs($item['prefix']);
+                    @endphp
+                    <li class="dropdown {{ $isActive ? 'active' : '' }}">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                            <i class="{{ $item['icon'] }}"></i> <span>{{ $item['title'] }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach ($item['children'] as $child)
+                                @php
+                                    $isRoute = isset($child['route']);
+                                    $isChildActive = $isRoute && request()->routeIs($child['route']);
+                                @endphp
+                                <li class="{{ $isChildActive ? 'active' : '' }}">
+                                    <a class="nav-link"
+                                        href="{{ $isRoute ? route($child['route']) : url($child['url']) }}">
+                                        {{ $child['title'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endforeach
+            @endforeach
+        </ul>
+    </aside>
+</div>
