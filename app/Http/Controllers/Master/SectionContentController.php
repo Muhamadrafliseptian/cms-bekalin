@@ -19,12 +19,21 @@ class SectionContentController
             ]);
 
             if ($request->hasFile('img')) {
-                $imagePath = $request->file('img')->store('banners', 'public');
+                $existing = SectionContent::where('section_id', $sectionId)
+                    ->where('key', 'image')->first();
+
+                if ($existing && Storage::disk('public')->exists($existing->value)) {
+                    Storage::disk('public')->delete($existing->value);
+                }
+
+                $imagePath = $request->file('img')->store("banners/section_$sectionId", 'public');
+
                 SectionContent::updateOrCreate(
                     ['section_id' => $sectionId, 'key' => 'image'],
                     ['value' => $imagePath]
                 );
             }
+
 
             if ($request->filled('headline')) {
                 SectionContent::updateOrCreate(

@@ -11,7 +11,7 @@ class WhatsInsideController
     public function index()
     {
         try {
-            $contents = SectionContent::where('section_id', 5)->get();
+            $contents = SectionContent::where('section_id', 6)->get();
             $section = $contents->pluck('value', 'key');
             $data = WhatsInside::all();
             return view('pages.home.whats-inside.index-whats-inside', ['section' => $section, 'data' => $data]);
