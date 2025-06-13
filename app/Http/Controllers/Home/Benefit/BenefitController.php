@@ -14,6 +14,12 @@ class BenefitController
             $contents = SectionContent::where('section_id', 4)->get();
             $section = $contents->pluck('value', 'key');
             $data = Benefit::all();
+            if(request()->wantsJson()){
+                return response()->json([
+                    'status' => "success",
+                    "data" => $data
+                ]);
+            }
             return view('pages.home.benefit.index-benefit', ['section' => $section, "data" => $data]);
         } catch (\Exception $err) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $err->getMessage());
@@ -23,13 +29,11 @@ class BenefitController
     {
         $request->validate([
             'headline' => 'required|string',
-            'subheadline' => 'required|string',
         ]);
 
         try {
             Benefit::create([
-                'headline' => $request->headline,
-                'subheadline' => $request->subheadline,
+                'headline' => sanitize_and_validate_typography($request->headline),
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
@@ -42,14 +46,12 @@ class BenefitController
     {
         $request->validate([
             'headline' => 'required|string',
-            'subheadline' => 'required|string',
         ]);
 
         try {
             $whatsinside = Benefit::findOrFail($id);
             $whatsinside->update([
-                'headline' => $request->headline,
-                'subheadline' => $request->subheadline,
+                'headline' => sanitize_and_validate_typography($request->headline),
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil diperbarui.');

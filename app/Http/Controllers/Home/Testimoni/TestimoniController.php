@@ -15,6 +15,12 @@ class TestimoniController
             $contents = SectionContent::where('section_id', 7)->get();
             $section = $contents->pluck('value', 'key');
             $data = Testimoni::all();
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'status' => "success",
+                    "data" => $data
+                ]);
+            }
             return view('pages.home.testimoni.index-testimoni', ['section' => $section, 'data' => $data]);
         } catch (\Exception $err) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $err->getMessage());
@@ -27,23 +33,27 @@ class TestimoniController
             $request->validate([
                 'nama' => 'required|string',
                 'review' => 'required|string',
-                'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'image' => 'required|image|mimes:jpg,jpeg,png|max:5048',
             ]);
+
             $imgPath = null;
 
             if ($request->hasFile('image')) {
                 $imgPath = $request->file('image')->store('testimoni', 'public');
             }
 
+            $nama = sanitize_and_validate_typography($request->nama, 'nama');
+            $review = sanitize_and_validate_typography($request->review, 'review');
+
             Testimoni::create([
-                'nama' => $request->nama,
-                'review' => $request->review,
+                'nama' => $nama,
+                'review' => $review,
                 'image' => $imgPath,
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
         } catch (\Exception $err) {
-            return redirect()->back()->with('error', 'Gagal menambahkan Why Us: ' . $err->getMessage());
+            return redirect()->back()->with('error', 'Gagal menambahkan testimoni: ' . $err->getMessage());
         }
     }
 
@@ -52,7 +62,7 @@ class TestimoniController
         $request->validate([
             'nama' => 'required|string',
             'review' => 'required|string',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:5048',
         ]);
 
         try {
@@ -64,8 +74,8 @@ class TestimoniController
 
                 $testimoni->image = $request->file('image')->store('testimoni', 'public');
             }
-            $testimoni->nama = $request->nama;
-            $testimoni->review = $request->review;
+            $testimoni->nama = sanitize_and_validate_typography($request->nama);
+            $testimoni->review = sanitize_and_validate_typography($request->review);
             $testimoni->save();
 
             return redirect()->back()->with('success', 'Data berhasil diperbarui.');

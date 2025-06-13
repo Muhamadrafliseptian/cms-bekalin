@@ -14,6 +14,12 @@ class WhatsInsideController
             $contents = SectionContent::where('section_id', 6)->get();
             $section = $contents->pluck('value', 'key');
             $data = WhatsInside::all();
+            if(request()->wantsJson()){
+                return response()->json([
+                    'status' => "success",
+                    "data" => $data,
+                ]);
+            }
             return view('pages.home.whats-inside.index-whats-inside', ['section' => $section, 'data' => $data]);
         } catch (\Exception $err) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $err->getMessage());
@@ -29,8 +35,8 @@ class WhatsInsideController
 
         try {
             WhatsInside::create([
-                'headline' => $request->headline,
-                'subheadline' => $request->subheadline,
+                'headline' => sanitize_and_validate_typography($request->headline),
+                'subheadline' => sanitize_and_validate_typography($request->subheadline),
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
@@ -49,8 +55,8 @@ class WhatsInsideController
         try {
             $whatsinside = WhatsInside::findOrFail($id);
             $whatsinside->update([
-                'headline' => $request->headline,
-                'subheadline' => $request->subheadline,
+                'headline' => sanitize_and_validate_typography($request->headline),
+                'subheadline' => sanitize_and_validate_typography($request->subheadline),
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil diperbarui.');

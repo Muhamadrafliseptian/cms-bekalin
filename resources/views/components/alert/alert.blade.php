@@ -1,6 +1,6 @@
 @props([
-    'type' => session('type', 'success') ?? section('type', 'error') ?? null,
-    'message' => session('success') ?? session('error') ?? null,
+    'message' => session('success') ?? session('error'),
+    'type' => session('success') ? 'success' : (session('error') ? 'error' : 'info'),
 ])
 
 @if ($message)

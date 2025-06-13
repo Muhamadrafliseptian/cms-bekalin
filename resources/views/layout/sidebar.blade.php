@@ -8,14 +8,14 @@
                     'icon' => 'fas fa-home',
                     'prefix' => 'home.*',
                     'children' => [
-                        ['title' => 'Batch Menu', 'route' => 'home.batch-menu.index'],
                         ['title' => 'Banner', 'route' => 'home.banner.index'],
-                        ['title' => 'Benefit', 'route' => 'home.benefit.index'],
                         ['title' => 'Diskon', 'route' => 'home.diskon.index'],
                         ['title' => 'Promo', 'route' => 'home.promo.index'],
-                        ['title' => 'Testimoni', 'route' => 'home.testimoni.index'],
-                        ['title' => 'What`s Inside', 'route' => 'home.whats-inside.index'],
+                        ['title' => 'Batch Menu', 'route' => 'home.batch-menu.index'],
+                        ['title' => 'Benefit', 'route' => 'home.benefit.index'],
                         ['title' => 'Why Us', 'route' => 'home.why-us.index'],
+                        ['title' => 'What`s Inside', 'route' => 'home.whats-inside.index'],
+                        ['title' => 'Testimoni', 'route' => 'home.testimoni.index'],
                     ],
                 ],
                 [
@@ -26,13 +26,6 @@
                         ['title' => 'Faq', 'route' => 'faq.index'],
                     ],
                 ],
-                [
-                    'title' => 'Our Community',
-                    'icon' => 'fas fa-users',
-                    'children' => [
-
-                    ],
-                ],
             ],
         ],
         [
@@ -41,7 +34,8 @@
                 [
                     'title' => 'Batch',
                     'icon' => 'fas fa-table',
-                    'children' => [['title' => 'Batch Data', 'url' => 'components-article.html']],
+                    'prefix' => 'master.*',
+                    'children' => [['title' => 'Batch Data', 'route' => 'master.batch.index']],
                 ],
             ],
         ],

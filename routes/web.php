@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Faq\FaqController;
 use App\Http\Controllers\Home\Banner\BannerController;
@@ -10,10 +11,20 @@ use App\Http\Controllers\Home\Promo\PromoController;
 use App\Http\Controllers\Home\Testimoni\TestimoniController;
 use App\Http\Controllers\Home\WhatsInside\WhatsInsideController;
 use App\Http\Controllers\Home\WhyUs\WhyUsController;
+use App\Http\Controllers\Master\MasterBatchController;
 use App\Http\Controllers\Master\SectionContentController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-Route::prefix('')->group(function () {
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard.index');
+    }
+    return redirect()->route('login');
+});
+Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::prefix('')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::prefix('home')->group(function () {
         Route::prefix('banner')->group(function () {
@@ -51,6 +62,8 @@ Route::prefix('')->group(function () {
         });
         Route::prefix('batch-menu')->group(function () {
             Route::get('/', [BatchMenuController::class, 'index'])->name('home.batch-menu.index');
+            Route::post('store', [BatchMenuController::class, 'store'])->name('home.batch-menu.store');
+            Route::post('put/{id}', [BatchMenuController::class, 'update'])->name('home.batch-menu.put');
         });
     });
     Route::prefix('faq')->group(function () {
@@ -62,6 +75,9 @@ Route::prefix('')->group(function () {
     Route::prefix('master')->group(function () {
         Route::prefix('section-contents')->group(function () {
             Route::post('store/{id}', [SectionContentController::class, 'store'])->name('master.section-contents.store');
+        });
+        Route::prefix('batch')->group(function(){
+            Route::get('/', [MasterBatchController::class, 'index'])->name('master.batch.index');
         });
     });
 });

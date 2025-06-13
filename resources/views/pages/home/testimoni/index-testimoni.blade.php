@@ -6,7 +6,7 @@
     <x-modal.modal-textarea id="edit_review" name="review" label="Review" />
 </x-modal.modal-form>
 
-<x-modal.modal-form id="createModal" title="Tambah Why Us" action="{{ route('home.testimoni.store') }}">
+<x-modal.modal-form id="createModal" title="Tambah Testimoni" action="{{ route('home.testimoni.store') }}">
     <x-modal.modal-input-file id="image" name="image" label="Image" />
     <x-modal.modal-textarea id="nama" name="nama" label="Nama" />
     <x-modal.modal-textarea id="review" name="review" label="Review" />

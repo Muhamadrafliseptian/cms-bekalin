@@ -2,12 +2,10 @@
 <x-modal.modal-form id="editModal" title="Edit Data" action="" method="POST">
     @method('POST')
     <x-modal.modal-textarea id="edit_headline" name="headline" label="Headline" />
-    <x-modal.modal-textarea id="edit_subheadline" name="subheadline" label="Sub Headline" />
 </x-modal.modal-form>
 
 <x-modal.modal-form id="createModal" title="Tambah Benefit" action="{{ route('home.benefit.store') }}">
     <x-modal.modal-textarea id="headline" name="headline" label="Headline" />
-    <x-modal.modal-textarea id="subheadline" name="subheadline" label="Sub Headline" />
 </x-modal.modal-form>
 @section('content')
     <div class="section-header">
@@ -61,19 +59,17 @@
                     </div>
                     <div class="card-body">
                         @php
-                            $headers = ['Headline', 'Sub Headline'];
+                            $headers = ['Headline'];
 
                             $rows = $data
                                 ->map(function ($item) {
                                     return [
                                         'id' => $item->id,
                                         'Headline' => $item->headline,
-                                        'Sub Headline' => $item->subheadline,
                                         'edit_url' => route('home.benefit.put', $item->id),
                                         'delete_url' => route('home.benefit.destroy', $item->id),
                                         'edit_data' => [
                                             'headline' => $item->headline,
-                                            'subheadline' => $item->subheadline,
                                         ],
                                         'data-target' => '#editModal',
                                     ];
@@ -112,7 +108,6 @@
 
                 form.action = btn.dataset.action;
                 form.querySelector('[name="headline"]').value = btn.dataset.headline;
-                form.querySelector('[name="subheadline"]').value = btn.dataset.subheadline;
             });
 
             $('#editModal').on('hidden.bs.modal', function() {

@@ -14,6 +14,12 @@ class FaqController
             $contents = SectionContent::where('section_id', 8)->get();
             $section = $contents->pluck('value', 'key');
             $data = Faq::all();
+            if(request()->wantsJson()){
+                return response()->json([
+                    'status' => "success",
+                    "data" => $data
+                ]);
+            }
             return view('pages.faq.index-faq', ['section' => $section, 'data' => $data]);
         } catch (\Exception $err) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $err->getMessage());
@@ -29,8 +35,8 @@ class FaqController
 
         try {
             Faq::create([
-                'question' => $request->question,
-                'answer' => $request->answer,
+                'question' => sanitize_and_validate_typography($request->question),
+                'answer' => sanitize_and_validate_typography($request->answer),
             ]);
 
             return redirect()->back()->with('success', 'FAQ berhasil ditambahkan.');
@@ -49,8 +55,8 @@ class FaqController
         try {
             $faq = Faq::findOrFail($id);
             $faq->update([
-                'question' => $request->question,
-                'answer' => $request->answer,
+                'question' => sanitize_and_validate_typography($request->question),
+                'answer' => sanitize_and_validate_typography($request->answer),
             ]);
 
             return redirect()->back()->with('success', 'FAQ berhasil diperbarui.');

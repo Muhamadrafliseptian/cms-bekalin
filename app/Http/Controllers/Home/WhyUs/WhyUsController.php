@@ -15,6 +15,12 @@ class WhyUsController
             $contents = SectionContent::where('section_id', 5)->get();
             $section = $contents->pluck('value', 'key');
             $data = WhyUs::all();
+            if(request()->wantsJson()){
+                return response()->json([
+                    'status' => "success",
+                    "data" => $data
+                ]);
+            }
             return view('pages.home.why-us.index-why-us', ['section' => $section, 'data' => $data]);
         } catch (\Exception $err) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $err->getMessage());
@@ -25,7 +31,8 @@ class WhyUsController
         try {
             $request->validate([
                 'headline' => 'required|string',
-                'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'subheadline' => 'required|string',
+                'image' => 'required|image|mimes:jpg,jpeg,png|max:5048',
             ]);
             $imgPath = null;
 
@@ -34,7 +41,8 @@ class WhyUsController
             }
 
             WhyUs::create([
-                'headline' => $request->headline,
+                'headline' => sanitize_and_validate_typography($request->headline),
+                'subheadline' => sanitize_and_validate_typography($request->subheadline),
                 'image' => $imgPath,
             ]);
 
@@ -46,13 +54,15 @@ class WhyUsController
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'headline' => 'required|string',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
         try {
+            $request->validate([
+                'headline' => 'required|string',
+                'subheadline' => 'required|string',
+                'image' => 'required|image|mimes:jpg,jpeg,png|max:5048',
+            ]);
             $whyus = WhyUs::findOrFail($id);
+
+
             if ($request->hasFile('image')) {
                 if ($whyus->image && Storage::disk('public')->exists($whyus->image)) {
                     Storage::disk('public')->delete($whyus->image);
@@ -60,8 +70,10 @@ class WhyUsController
 
                 $whyus->image = $request->file('image')->store('whyus', 'public');
             }
-            $whyus->headline = $request->headline;
+            $whyus->headline = sanitize_and_validate_typography($request->headline);
+            $whyus->subheadline = sanitize_and_validate_typography($request->subheadline);
             $whyus->save();
+
 
             return redirect()->back()->with('success', 'Data berhasil diperbarui.');
         } catch (\Exception $err) {
