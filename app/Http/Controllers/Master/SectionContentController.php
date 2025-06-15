@@ -47,7 +47,6 @@ class SectionContentController
                     ['value' => $imagePath]
                 );
             }
-            dd($imagePath); // setelah store()
 
             // Sanitize dan validasi konten text
             if ($request->filled('headline')) {
