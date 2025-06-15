@@ -82,42 +82,29 @@ class BatchMenuController
 
             return redirect()->back()->with('success', 'Menu mingguan berhasil ditambahkan.');
         } catch (\Exception $e) {
-
-            dd($e->getMessage());
             return back()->with('error', $e->getMessage());
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
-            // dd($request->all());
-
             $request->validate([
-                'id' => 'exists:bkl_batch_menu,id',
-                // 'day' => 'string',
-                // 'lunch_menu' => 'required|string',
-                // 'dinner_menu' => 'required|string',
                 'image' => 'image|mimes:jpg,jpeg,png|max:5048',
             ]);
-
-            $menu = BatchMenu::findOrFail($request->id);
-
+            $menu = BatchMenu::findOrFail($id);
             if ($request->hasFile('image')) {
                 if ($menu->image && Storage::disk('public')->exists($menu->image)) {
                     Storage::disk('public')->delete($menu->image);
                 }
-
                 $menu->image = $request->file('image')->store('menu', 'public');
             }
-            // $menu->day = $request->day;
-            // $menu->lunch_menu = sanitize_and_validate_typography($request->lunch_menu);
-            // $menu->dinner_menu = sanitize_and_validate_typography($request->dinner_menu);
+
             $menu->save();
 
             return redirect()->back()->with('success', 'Menu berhasil diperbarui.');
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

@@ -81,6 +81,7 @@
                                         'edit_url' => route('home.batch-menu.put', $item->id),
                                         'delete_url' => route('home.batch-menu.put', $item->id),
                                         'edit_data' => [
+                                            'id' => $item->id,
                                             'day' => $item->day,
                                             'image' => asset('storage/' . $item->image),
                                         ],
