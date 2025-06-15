@@ -41,13 +41,13 @@ class SectionContentController
                 }
 
                 $imagePath = $request->file('img')->store("banners/section_$sectionId", 'public');
-                dd($imagePath); // setelah store()
 
                 SectionContent::updateOrCreate(
                     ['section_id' => $sectionId, 'key' => 'image'],
                     ['value' => $imagePath]
                 );
             }
+            dd($imagePath); // setelah store()
 
             // Sanitize dan validasi konten text
             if ($request->filled('headline')) {
