@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\SectionContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Purifier;
 
@@ -13,6 +14,8 @@ class SectionContentController
 {
     public function store(Request $request, $sectionId)
     {
+
+        dd($request->all());
         try {
             $rules = [];
 
@@ -69,10 +72,10 @@ class SectionContentController
 
             return redirect()->back()->with('success', 'Data berhasil disimpan.');
         } catch (\Exception $e) {
+            Log::info('Form store() called');
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
 
     public function indexHomeApi()
     {

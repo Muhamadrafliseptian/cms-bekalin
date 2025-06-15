@@ -12,5 +12,3 @@
         </div>
     </div>
 </div>
-
-<x-modal.modal-form></x-modal.modal-form>
