@@ -15,7 +15,6 @@ class SectionContentController
     public function store(Request $request, $sectionId)
     {
 
-        dd($request->all());
         try {
             $rules = [];
 
