@@ -11,10 +11,12 @@ use App\Http\Controllers\Home\Promo\PromoController;
 use App\Http\Controllers\Home\Testimoni\TestimoniController;
 use App\Http\Controllers\Home\WhatsInside\WhatsInsideController;
 use App\Http\Controllers\Home\WhyUs\WhyUsController;
+use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\MasterBatchController;
 use App\Http\Controllers\Master\SectionContentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('dashboard.index');
@@ -76,8 +78,16 @@ Route::prefix('')->middleware('auth')->group(function () {
         Route::prefix('section-contents')->group(function () {
             Route::post('store/{id}', [SectionContentController::class, 'store'])->name('master.section-contents.store');
         });
-        Route::prefix('batch')->group(function(){
+        Route::prefix('batch')->group(function () {
             Route::get('/', [MasterBatchController::class, 'index'])->name('master.batch.index');
+        });
+    });
+    Route::prefix('profile')->group(function () {
+        Route::prefix("administrator")->group(function () {
+            Route::get('/', [AdminController::class, 'index'])->name('profile.administrator.index');
+            Route::post('store', [AdminController::class, 'store'])->name('profile.administrator.store');
+            Route::post('put/{id}', [AdminController::class, 'update'])->name('profile.administrator.put');
+            Route::delete('destroy/{id}', [AdminController::class, 'destroy'])->name('profile.administrator.destroy');
         });
     });
 });

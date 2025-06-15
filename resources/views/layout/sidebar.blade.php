@@ -22,9 +22,7 @@
                     'title' => 'FAQ',
                     'icon' => 'fas fa-comments',
                     'prefix' => 'faq.*',
-                    'children' => [
-                        ['title' => 'Faq', 'route' => 'faq.index'],
-                    ],
+                    'children' => [['title' => 'Faq', 'route' => 'faq.index']],
                 ],
             ],
         ],
@@ -43,11 +41,10 @@
             'header' => 'Settings',
             'items' => [
                 [
-                    'title' => 'Profile',
+                    'title' => 'Administrator',
                     'icon' => 'far fa-user',
-                    'children' => [
-                        ['title' => 'Profile Data', 'url' => 'auth-forgot-password.html'],
-                    ],
+                    'prefix' => 'profile.*',
+                    'children' => [['title' => 'Data Administrator', 'route' => 'profile.administrator.index']],
                 ],
             ],
         ],
