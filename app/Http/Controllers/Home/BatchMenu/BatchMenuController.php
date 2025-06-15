@@ -53,8 +53,6 @@ class BatchMenuController
             $request->validate([
                 'menus' => 'required|array|min:1',
                 'menus.*.day' => 'required|string',
-                // 'menus.*.lunch_menu' => 'required|string',
-                // 'menus.*.dinner_menu' => 'required|string',
                 'menus.*.image' => 'required|image|mimes:jpg,jpeg,png|max:5048',
                 'batch_id' => 'required|exists:bkl_master_batch,id',
             ]);
@@ -74,8 +72,6 @@ class BatchMenuController
                 BatchMenu::create([
                     'batch_id' => $request->batch_id,
                     'day' => $menuData['day'],
-                    // 'lunch_menu' => sanitize_and_validate_typography($menuData['lunch_menu']),
-                    // 'dinner_menu' => sanitize_and_validate_typography($menuData['dinner_menu']),
                     'image' => $imgPath,
                 ]);
             }
@@ -97,7 +93,7 @@ class BatchMenuController
                 if ($menu->image && Storage::disk('public')->exists($menu->image)) {
                     Storage::disk('public')->delete($menu->image);
                 }
-                $menu->image = $request->file('image')->store('menu', 'public');
+                $menu->image = $request->file('image')->store('batch', 'public');
             }
 
             $menu->save();
