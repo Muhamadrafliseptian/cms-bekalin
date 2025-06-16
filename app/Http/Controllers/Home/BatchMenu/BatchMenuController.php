@@ -41,7 +41,7 @@ class BatchMenuController
             }
 
             $data = MasterBatch::orderBy('start_date', 'asc')->get();
-            $dataMenu = BatchMenu::all();
+            $dataMenu = BatchMenu::orderBy('created_at', 'desc')->get();
             return view('pages.home.batch-menu.index-batch-menu', ['data' => $data, 'data_menu' => $dataMenu]);
         } catch (\Exception $err) {
             return back()->with('error', $err->getMessage());

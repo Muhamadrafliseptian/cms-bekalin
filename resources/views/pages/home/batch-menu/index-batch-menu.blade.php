@@ -79,7 +79,7 @@
                                             \Carbon\Carbon::parse($item->batch->end_date)->translatedFormat('d F Y'),
                                         'Image' => $item->image,
                                         'edit_url' => route('home.batch-menu.put', $item->id),
-                                        'delete_url' => route('home.batch-menu.put', $item->id),
+                                        // 'delete_url' => route('home.batch-menu.put', $item->id),
                                         'edit_data' => [
                                             'id' => $item->id,
                                             'day' => $item->day,

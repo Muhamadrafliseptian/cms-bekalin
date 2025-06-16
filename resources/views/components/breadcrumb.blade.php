@@ -2,7 +2,7 @@
     @foreach ($items as $item)
         <div class="breadcrumb-item {{ $loop->last ? '' : 'active' }}">
             @if (isset($item['url']))
-                <a href="{{ $item['url'] }} active">{{ $item['title'] }}</a>
+                <a href="{{ $item['url'] }}">{{ $item['title'] }}</a>
             @else
                 {{ $item['title'] }}
             @endif

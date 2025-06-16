@@ -12,7 +12,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total Testimoni</h4>
+                        <h4>Testimoni</h4>
                     </div>
                     <div class="card-body">
                         {{ $testimoni }}
@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total FAQ</h4>
+                        <h4>FAQ</h4>
                     </div>
                     <div class="card-body">
                         {{ $faq }}
@@ -42,7 +42,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total Benefit</h4>
+                        <h4>Benefit</h4>
                     </div>
                     <div class="card-body">
                         {{ $benefit }}
@@ -57,7 +57,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total Admin</h4>
+                        <h4>Admin</h4>
                     </div>
                     <div class="card-body">
                         {{ $admin }}

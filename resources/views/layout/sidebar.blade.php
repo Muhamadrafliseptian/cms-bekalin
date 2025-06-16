@@ -6,7 +6,6 @@
                 [
                     'title' => 'Home',
                     'icon' => 'fas fa-home',
-                    'prefix' => 'home.*',
                     'children' => [
                         ['title' => 'Banner', 'route' => 'home.banner.index'],
                         ['title' => 'Diskon', 'route' => 'home.diskon.index'],
@@ -21,7 +20,6 @@
                 [
                     'title' => 'FAQ',
                     'icon' => 'fas fa-comments',
-                    'prefix' => 'faq.*',
                     'children' => [['title' => 'Faq', 'route' => 'faq.index']],
                 ],
             ],
@@ -32,8 +30,17 @@
                 [
                     'title' => 'Batch',
                     'icon' => 'fas fa-table',
-                    'prefix' => 'master.*',
                     'children' => [['title' => 'Batch Data', 'route' => 'master.batch.index']],
+                ],
+                [
+                    'title' => 'Meta',
+                    'icon' => 'fab fa-google',
+                    'children' => [['title' => 'Meta Data', 'route' => 'master.meta.index']],
+                ],
+                [
+                    'title' => 'Menu',
+                    'icon' => 'fas fa-bars',
+                    'children' => [['title' => 'Menu Data', 'route' => 'master.menu.index']],
                 ],
             ],
         ],
@@ -43,7 +50,6 @@
                 [
                     'title' => 'Administrator',
                     'icon' => 'far fa-user',
-                    'prefix' => 'profile.*',
                     'children' => [['title' => 'Data Administrator', 'route' => 'profile.administrator.index']],
                 ],
             ],
@@ -53,28 +59,48 @@
 
 <div class="main-sidebar sidebar-style-2">
     <div class="ml-3 mt-3 d-flex align-items-center"></div>
+    <div class="sidebar-brand">
+        <a href="{{ route('dashboard.index') }}">
+            <img src="{{ asset('assets/img/bekalin/logo.png') }}" alt="Bekelin Logo" class="img-fluid" width="60"
+                height="60">
+        </a>
+    </div>
+
+    <div class="sidebar-brand sidebar-brand-sm">
+        <a href="{{ route('dashboard.index') }}">
+            <img src="{{ asset('assets/img/bekalin/logo.png') }}" alt="Logo" class="img-fluid" height="60" width="60">
+        </a>
+    </div>
+
 
     <aside id="sidebar-wrapper">
         <ul class="sidebar-menu">
             @foreach ($menus as $section)
                 <li class="menu-header">{{ $section['header'] }}</li>
+
                 @foreach ($section['items'] as $item)
                     @php
-                        $isActive = isset($item['prefix']) && request()->routeIs($item['prefix']);
+                        $active = collect($item['children'] ?? [])
+                            ->pluck('route')
+                            ->filter()
+                            ->some(fn($r) => request()->routeIs($r));
                     @endphp
-                    <li class="dropdown {{ $isActive ? 'active' : '' }}">
+
+                    <li class="dropdown {{ $active ? 'active' : '' }}">
                         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-                            <i class="{{ $item['icon'] }}"></i> <span>{{ $item['title'] }}</span>
+                            <i class="{{ $item['icon'] ?? 'fas fa-circle' }}"></i>
+                            <span>{{ $item['title'] }}</span>
                         </a>
                         <ul class="dropdown-menu">
-                            @foreach ($item['children'] as $child)
+                            @foreach ($item['children'] ?? [] as $child)
                                 @php
-                                    $isRoute = isset($child['route']);
-                                    $isChildActive = $isRoute && request()->routeIs($child['route']);
+                                    $isActiveChild = isset($child['route']) && request()->routeIs($child['route']);
+                                    $childLink = isset($child['route'])
+                                        ? route($child['route'])
+                                        : url($child['url'] ?? '#');
                                 @endphp
-                                <li class="{{ $isChildActive ? 'active' : '' }}">
-                                    <a class="nav-link"
-                                        href="{{ $isRoute ? route($child['route']) : url($child['url']) }}">
+                                <li class="{{ $isActiveChild ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ $childLink }}">
                                         {{ $child['title'] }}
                                     </a>
                                 </li>

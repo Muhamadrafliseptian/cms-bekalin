@@ -13,6 +13,8 @@ use App\Http\Controllers\Home\WhatsInside\WhatsInsideController;
 use App\Http\Controllers\Home\WhyUs\WhyUsController;
 use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\MasterBatchController;
+use App\Http\Controllers\Master\MenuController;
+use App\Http\Controllers\Master\MetaController;
 use App\Http\Controllers\Master\SectionContentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +82,18 @@ Route::prefix('')->middleware('auth')->group(function () {
         });
         Route::prefix('batch')->group(function () {
             Route::get('/', [MasterBatchController::class, 'index'])->name('master.batch.index');
+        });
+        Route::prefix('meta')->group(function () {
+            Route::get('/', [MetaController::class, 'index'])->name('master.meta.index');
+            Route::post('store', [MetaController::class, 'store'])->name('master.meta.store');
+            Route::post('put/{id}', [MetaController::class, 'update'])->name('master.meta.put');
+            Route::delete('destroy/{id}', [MetaController::class, 'destroy'])->name('master.meta.destroy');
+        });
+        Route::prefix('menu')->group(function () {
+            Route::get('/', [MenuController::class, 'index'])->name('master.menu.index');
+            Route::post('store', [MenuController::class, 'store'])->name('master.menu.store');
+            Route::post('put/{id}', [MenuController::class, 'update'])->name('master.menu.put');
+            Route::delete('destroy/{id}', [MenuController::class, 'destroy'])->name('master.menu.destroy');
         });
     });
     Route::prefix('profile')->group(function () {
