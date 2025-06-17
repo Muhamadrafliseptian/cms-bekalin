@@ -9,7 +9,7 @@
 
     @yield('css')
     @include('layout.partials.head-css')
-    <title>@yield('title', 'Dashboard Bekelinssss')</title>
+    <title>@yield('title', 'Dashboard Bekelin')</title>
 </head>
 
 <body>
